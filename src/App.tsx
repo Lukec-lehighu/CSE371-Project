@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { SignIn } from "./pages/SignIn";
 import { GroupHome } from "./pages/GroupHome";
-import { Receipts } from "./pages/receipts";
+import { Receipts } from "./pages/Receipts";
 import { NotFound } from "./pages/NotFound";
-import { Requests } from "./pages/requests";
+import { Requests } from "./pages/Requests";
 
 function App() {
   const [pageID, setPageID] = useState(0);
@@ -12,7 +12,7 @@ function App() {
     switch(pageID) {
       case 0:
         return (
-          <SignIn />
+          <SignIn setPageID={setPageID}/>
         );
       case 1:
         return (
