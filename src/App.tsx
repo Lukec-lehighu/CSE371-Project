@@ -9,6 +9,7 @@ import { Groups } from "./pages/Groups";
 function App() {
   const [pageID, setPageID] = useState(0);
 
+  //using a single page cuz I'm too lazy right now for react router
   const getPage = () => {
     switch(pageID) {
       case 0:
