@@ -45,6 +45,7 @@ export const SignIn = ({setPageID}: Props) => {
       
       Cookies.set('authToken', token!);
       Cookies.set('userName', user.displayName!);
+      Cookies.set('email', user.email!);
 
       setPageID(1);
     }).catch((error) => {
