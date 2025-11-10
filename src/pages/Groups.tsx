@@ -1,5 +1,9 @@
+import { GroupCard } from "../components/GroupCard"
+
 export const Groups = () => {
   return (
-    <div>groups</div>
+    <>
+        <GroupCard name='Test group' joined={true}/>
+    </>
   )
 }

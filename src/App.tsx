@@ -4,6 +4,7 @@ import { GroupHome } from "./pages/GroupHome";
 import { Receipts } from "./pages/Receipts";
 import { NotFound } from "./pages/NotFound";
 import { Requests } from "./pages/Requests";
+import { Groups } from "./pages/Groups";
 
 function App() {
   const [pageID, setPageID] = useState(0);
@@ -16,13 +17,17 @@ function App() {
         );
       case 1:
         return (
-          <GroupHome/>
+          <Groups/>
         );
       case 2:
         return (
-          <Receipts/>
+          <GroupHome/>
         );
       case 3:
+        return (
+          <Receipts/>
+        );
+      case 4:
         return (
           <Requests/>
         );
@@ -33,7 +38,6 @@ function App() {
 
   return (
     <>
-      
       <div className="d-flex justify-content-center pt-3">
         {getPage()}
       </div>
