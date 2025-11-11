@@ -26,7 +26,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
 
     console.log(`${name}: ${isPublic} : ${owner}`);
     //TODO: make actual call to API to create new group
-    closeModalRef.current?.click();
+    closeModalRef.current?.click(); //close the modal if successful
   }
 
   useEffect(()=>{
