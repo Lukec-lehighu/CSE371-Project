@@ -5,7 +5,7 @@ export function getAllGroups() {
 
     let temp: groupData = {
         name: 'test',
-        joined: false
+        joined: true
     }
 
     data.push(temp);
