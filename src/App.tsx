@@ -5,6 +5,10 @@ import { Receipts } from "./pages/Receipts";
 import { NotFound } from "./pages/NotFound";
 import { Requests } from "./pages/Requests";
 import { Groups } from "./pages/Groups";
+import { Members } from "./pages/Members";
+import { Dept } from "./pages/Dept";
+
+import { BackButton } from "./components/BackButton";
 import { HomeButton } from "./components/HomeButton";
 
 function App() {
@@ -26,17 +30,37 @@ function App() {
       case 2:
         return (
           <>
-            <GroupHome groupName={currGroupName}/>
+            <GroupHome groupName={currGroupName} setPageID={setPageID}/>
             <HomeButton setPageID={setPageID}/>
           </>
         );
       case 3:
         return (
-          <Receipts/>
+          <>
+            <Receipts/>
+            <BackButton onClick={()=>setPageID(2)}/>
+          </>
         );
       case 4:
         return (
-          <Requests/>
+          <>
+            <Requests/>
+            <BackButton onClick={()=>setPageID(2)}/>
+          </>
+        );
+      case 5:
+        return (
+          <>
+            <Members groupName={currGroupName}/>
+            <BackButton onClick={()=>setPageID(2)}/>
+          </>
+        );
+      case 6:
+        return (
+          <>
+            <Dept groupName={currGroupName}/>
+            <BackButton onClick={()=>setPageID(2)}/>
+          </>
         );
       default:
         //just in case the programmer messes up the page ID: make it very clear that they did
