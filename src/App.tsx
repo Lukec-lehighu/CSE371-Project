@@ -7,7 +7,8 @@ import { Requests } from "./pages/Requests";
 import { Groups } from "./pages/Groups";
 
 function App() {
-  const [pageID, setPageID] = useState(0);
+  const [pageID, setPageID] = useState(0); // ID 0: always start on sign in screen
+  const [currGroupName, setGroupName] = useState('');
 
   //using a single page cuz I'm too lazy right now for react router
   const getPage = () => {
@@ -18,11 +19,11 @@ function App() {
         );
       case 1:
         return (
-          <Groups/>
+          <Groups setPageID={setPageID} setGroupName={setGroupName}/>
         );
       case 2:
         return (
-          <GroupHome/>
+          <GroupHome groupName={currGroupName}/>
         );
       case 3:
         return (
@@ -33,6 +34,7 @@ function App() {
           <Requests/>
         );
       default:
+        //just in case the programmer messes up the page ID: make it very clear that they did
         return <NotFound/>;
     }
   }

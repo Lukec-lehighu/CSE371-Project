@@ -1,5 +1,11 @@
-export const GroupHome = () => {
+interface Props {
+  groupName: string;
+}
+
+export const GroupHome = ({groupName}: Props) => {
   return (
-    <div>group_home</div>
+    <>
+      <div>{groupName}</div>
+    </>
   )
 }

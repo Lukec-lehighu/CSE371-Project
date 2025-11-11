@@ -8,7 +8,12 @@ export interface groupData {
   joined: boolean;
 }
 
-export const Groups = () => {
+interface Props {
+  setPageID: (id:number) => void;
+  setGroupName: (name:string) => void;
+}
+
+export const Groups = ({setPageID, setGroupName}: Props) => {
   const [groups, setGroups] = useState<groupData[]>();
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +75,7 @@ export const Groups = () => {
             {
               groups && groups.map((item, index) => (
                 <li key={index} className="list-group-item">
-                  <GroupCard name={item.name} joined={item.joined}/>
+                  <GroupCard name={item.name} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName}/>
                 </li>
               ))
             }

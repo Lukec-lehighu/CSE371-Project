@@ -15,3 +15,7 @@ export function getAllGroups() {
 export function addNewGroup() { //return true if successful, false otherwise
 
 }
+
+export function joinGroup(groupName: string): boolean { //return true if successful, false otherwise (private group and not on whitelist)
+    return false;
+}
