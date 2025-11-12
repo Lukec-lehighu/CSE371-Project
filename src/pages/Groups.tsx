@@ -98,7 +98,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
             {
               groups && groups.map((item, index) => (
                 <li key={index} className="list-group-item">
-                  <GroupCard name={item.name} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName} id={index}/>
+                  <GroupCard name={item.name[0]} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName} id={index}/>
                 </li>
               ))
             }

@@ -54,6 +54,23 @@ export async function addNewGroup(groupName:string, ownerName:string, isPublic:b
     return null;
 }
 
-export function joinGroup(groupName: string): boolean { //return true if successful, false otherwise (private group and not on whitelist)
-    return false;
+export async function joinGroup(groupName: string): Promise<string|null> { //return null if successful, false otherwise (private group and not on whitelist)
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "join_group", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'group': groupName,
+            'token': token
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+
+    return null;
 }
