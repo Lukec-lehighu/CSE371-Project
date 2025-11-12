@@ -1,16 +1,37 @@
 import type { groupData } from "../pages/Groups";
+import Cookies from 'js-cookie';
 
 const API_ADDR = 'http://127.0.0.1:5000/';
 
-export function getAllGroups() {
-    let data: Array<groupData> = [];
+export async function getAllGroups() {
+    const token = Cookies.get('authToken');
 
-    let temp: groupData = {
-        name: 'test',
-        joined: true
+    const resp = await fetch(API_ADDR + "groups", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'token': token
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error || !json.ok) {
+        console.log(`Error fetching groups: ${json.error}`)
+        return;
     }
 
-    data.push(temp);
+    var data: Array<groupData> = [];
+    json.ok.forEach((item:string)=>{
+        let temp: groupData = {
+            name: item,
+            joined: true
+        }
+
+        data.push(temp);
+    })
+    
     return data;
 }
 

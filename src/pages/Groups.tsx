@@ -23,7 +23,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
   const handleNewGroup = (formData:FormData) => {
     const name = formData.get('groupName')?.toString();
     const isPublic = formData.get('isPublic') === 'on';
-    const owner = Cookies.get('email');
+    const owner = Cookies.get('authToken');
 
     if(!name || !owner) //has to be an actual name
       return;
@@ -38,8 +38,10 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
   }
 
   useEffect(()=>{
-    setGroups(getAllGroups());
-    setLoading(false);
+    getAllGroups().then((res)=>{
+      setGroups(res);
+      setLoading(false);
+    })
   }, []);
 
   return (
@@ -78,7 +80,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
 
       {loading ? 
         <>
-          <div className="spinner-border text-light" role="status">
+          <div className="spinner-border text-primary m-5 p-1" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </> 
