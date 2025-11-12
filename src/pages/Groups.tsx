@@ -37,18 +37,26 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
     });
   }
 
-  useEffect(()=>{
+  const loadGroups = ()=>{
+    setLoading(true);
     getAllGroups().then((res)=>{
       setGroups(res);
       setLoading(false);
     })
+  }
+
+  useEffect(()=>{
+    if(groups?.length == 0)
+      loadGroups();
+    else
+      setLoading(false);
   }, []);
 
   return (
     <>
       <div className="modal fade" id="newGroupModal" tabIndex={-1} aria-labelledby="newGroup" aria-hidden="true">
         <div className="modal-dialog">
-            <div className="modal-content">
+          <div className="modal-content">
             <div className="modal-header">
                 <h1 className="modal-title fs-5" id="newGroupModal">New Group</h1>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeModalRef}></button>
@@ -90,16 +98,19 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
             {
               groups && groups.map((item, index) => (
                 <li key={index} className="list-group-item">
-                  <GroupCard name={item.name} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName}/>
+                  <GroupCard name={item.name} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName} id={index}/>
                 </li>
               ))
             }
           </ul>
+          <div className="d-flex justify-content-center fixed-bottom m-3">
+            <button className="btn btn-dark p-3" onClick={loadGroups}>Refresh</button>
+          </div>
         </>
       }
 
-      <div className="d-flex justify-content-end p-4 fixed-bottom" data-bs-toggle="modal" data-bs-target="#newGroupModal">
-        <button className="btn btn-primary">
+      <div data-bs-toggle="modal" data-bs-target="#newGroupModal">
+        <button className="btn btn-primary" style={{position: "absolute", bottom:20, right:20}}>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-circle m-2" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>

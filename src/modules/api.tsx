@@ -23,10 +23,10 @@ export async function getAllGroups() {
     }
 
     var data: Array<groupData> = [];
-    json.ok.forEach((item:string)=>{
+    json.ok.forEach((item:any[])=>{
         let temp: groupData = {
-            name: item,
-            joined: true
+            name: item[0],
+            joined: item[1]
         }
 
         data.push(temp);
@@ -35,7 +35,7 @@ export async function getAllGroups() {
     return data;
 }
 
-export async function addNewGroup(groupName:string, ownerName:string, isPublic:boolean): Promise<string|null> { //return error if failure, false otherwise
+export async function addNewGroup(groupName:string, ownerName:string, isPublic:boolean): Promise<string|null> { //return error if failure, null otherwise
     const resp = await fetch(API_ADDR + "make_group", {
         method: "POST",
         headers: {

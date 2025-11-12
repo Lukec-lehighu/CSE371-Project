@@ -5,15 +5,16 @@ interface Props {
   joined: boolean;
   setPageID: (id:number) => void;
   setGroupName: (name:string) => void;
+  id: number;
 }
 
-export const GroupCard = ({name, joined, setPageID, setGroupName}: Props) => {
+export const GroupCard = ({name, joined, setPageID, setGroupName, id}: Props) => {
   const appendAlert = (message:string, type:string) => {
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    const alertPlaceholder = document.getElementById(`liveAlertPlaceholder${id}`);
 
     if(alertPlaceholder)
       alertPlaceholder.innerHTML  = [
-      `<div id="liveAlertPlaceholder" class="alert alert-${type} alert-dismissible align-self-bottom" role="alert">`,
+      `<div id="liveAlertPlaceholder${id}" class="alert alert-${type} alert-dismissible align-self-bottom" role="alert">`,
       `   <div>${message}</div>`,
       '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       '</div>'
@@ -36,7 +37,7 @@ export const GroupCard = ({name, joined, setPageID, setGroupName}: Props) => {
           {joined ? 'Select' : 'Join'}
         </button>
       </div>
-      <div id="liveAlertPlaceholder"></div>
+      <div id={`liveAlertPlaceholder${id}`}></div>
     </>
   )
 }
