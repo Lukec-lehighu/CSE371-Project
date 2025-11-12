@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getAllGroups } from "../modules/api";
+import { getAllGroups, addNewGroup } from "../modules/api";
 import { GroupCard } from "../components/GroupCard"
 import Cookies from 'js-cookie';
 
@@ -20,12 +20,15 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
   const closeModalRef = useRef<any>(null);
 
   const handleNewGroup = (formData:FormData) => {
-    const name = formData.get('groupName');
+    const name = formData.get('groupName')?.toString();
     const isPublic = formData.get('isPublic') === 'on';
     const owner = Cookies.get('email');
 
+    if(!name || !owner) //has to be an actual name
+      return;
+
     console.log(`${name}: ${isPublic} : ${owner}`);
-    //TODO: make actual call to API to create new group
+    addNewGroup(name, owner, isPublic);
     closeModalRef.current?.click(); //close the modal if successful
   }
 
