@@ -1,6 +1,6 @@
 import type { groupData } from "../pages/Groups";
 
-const API_ADDR = 'localhost:5000/';
+const API_ADDR = 'http://127.0.0.1:5000/';
 
 export function getAllGroups() {
     let data: Array<groupData> = [];
@@ -14,7 +14,7 @@ export function getAllGroups() {
     return data;
 }
 
-export async function addNewGroup(groupName:string, ownerName:string, isPublic:boolean): Promise<boolean> { //return true if successful, false otherwise
+export async function addNewGroup(groupName:string, ownerName:string, isPublic:boolean): Promise<string|null> { //return error if failure, false otherwise
     const resp = await fetch(API_ADDR + "make_group", {
         method: "POST",
         headers: {
@@ -26,8 +26,11 @@ export async function addNewGroup(groupName:string, ownerName:string, isPublic:b
             'public': (isPublic ? 1 : 0)
         })
     });
-    
-    return true;
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+    return null;
 }
 
 export function joinGroup(groupName: string): boolean { //return true if successful, false otherwise (private group and not on whitelist)

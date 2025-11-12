@@ -16,6 +16,7 @@ interface Props {
 export const Groups = ({setPageID, setGroupName}: Props) => {
   const [groups, setGroups] = useState<groupData[]>();
   const [loading, setLoading] = useState(true);
+  const [modalError, setModalError] = useState('');
 
   const closeModalRef = useRef<any>(null);
 
@@ -28,8 +29,12 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
       return;
 
     console.log(`${name}: ${isPublic} : ${owner}`);
-    addNewGroup(name, owner, isPublic);
-    closeModalRef.current?.click(); //close the modal if successful
+    addNewGroup(name, owner, isPublic).then((resp)=>{
+      if(resp)
+        setModalError(resp);
+      else
+        closeModalRef.current?.click(); //close the modal if successful
+    });
   }
 
   useEffect(()=>{
@@ -61,6 +66,11 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
               <button type="submit" className="btn btn-primary" form="group-form">Create</button>
+              {modalError!=='' && 
+                <div className="alert alert-danger" role="alert">
+                  {modalError}
+                </div>
+              }
             </div>
             </div>
           </div>
