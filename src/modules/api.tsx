@@ -74,3 +74,48 @@ export async function joinGroup(groupName: string): Promise<string|null> { //ret
 
     return null;
 }
+
+export async function getReceipts(groupname: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipts", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'GET',
+            'token': token,
+            'groupname': groupname
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function newReceipt(groupName: string, receiptName: string): Promise<string|null> {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipts", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'POST',
+            'token': token,
+            'groupname': groupName,
+            'name': receiptName
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+    return null;
+}

@@ -32,8 +32,10 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
     addNewGroup(name, owner, isPublic).then((resp)=>{
       if(resp)
         setModalError(resp);
-      else
+      else {
         closeModalRef.current?.click(); //close the modal if successful
+        loadGroups();
+      }
     });
   }
 
@@ -46,10 +48,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
   }
 
   useEffect(()=>{
-    if(groups?.length == 0)
-      loadGroups();
-    else
-      setLoading(false);
+    loadGroups();
   }, []);
 
   return (
