@@ -80,12 +80,58 @@ export async function getMembers(groupname: string) {
         method: "GET"
     });
 
-    const json = await resp.json()
+    const json = await resp.json();
     if(json.error) {
         console.log(json.error);
         return null;
     }
     return json.ok;
+}
+
+export async function removeMember(groupname: string, member: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "remove_from_group", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'token': token,
+            'groupname': groupname,
+            'username': member
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function addMember(groupname: string, member: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "add_to_private", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'token': token,
+            'groupname': groupname,
+            'username': member
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok; 
 }
 
 export async function getReceipts(groupname: string) {

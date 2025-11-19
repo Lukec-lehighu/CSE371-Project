@@ -81,9 +81,9 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
                 </div>
               }
             </div>
-            </div>
           </div>
         </div>
+      </div>
 
       {loading ? 
         <>
