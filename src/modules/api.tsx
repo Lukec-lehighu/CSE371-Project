@@ -75,6 +75,19 @@ export async function joinGroup(groupName: string): Promise<string|null> { //ret
     return null;
 }
 
+export async function getMembers(groupname: string) {
+    const resp = await fetch(API_ADDR + `members?groupname=${groupname}`, {
+        method: "GET"
+    });
+
+    const json = await resp.json()
+    if(json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
 export async function getReceipts(groupname: string) {
     const token = Cookies.get('authToken');
 
