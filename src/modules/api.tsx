@@ -134,6 +134,78 @@ export async function addMember(groupname: string, member: string) {
     return json.ok; 
 }
 
+
+export async function getRequests(groupname: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "requests", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'GET',
+            'token': token,
+            'groupname': groupname
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function newRequest(groupname: string, request: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "requests", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'POST',
+            'token': token,
+            'groupname': groupname,
+            'request': request
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function removeRequest(rid: number) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "requests", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'DELETE',
+            'token': token,
+            'rowid': rid
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+
 export async function getReceipts(groupname: string) {
     const token = Cookies.get('authToken');
 

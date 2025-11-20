@@ -25,7 +25,10 @@ function App() {
       case 1:
         //this is kind of the home page ig
         return (
-          <Groups setPageID={setPageID} setGroupName={setGroupName}/>
+          <div className="w-100 d-flex flex-column align-items-center">
+            <h1 className="display-2 fw-bold p-4">House Debt Tracker</h1>
+            <Groups setPageID={setPageID} setGroupName={setGroupName}/>
+          </div>
         );
       case 2:
         return (
@@ -44,7 +47,7 @@ function App() {
       case 4:
         return (
           <>
-            <Requests/>
+            <Requests groupName={currGroupName}/>
             <BackButton onClick={()=>setPageID(2)}/>
           </>
         );

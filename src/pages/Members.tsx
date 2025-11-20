@@ -39,7 +39,7 @@ export const Members = ({groupName}: Props) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-                <h1 className="modal-title fs-5" id="newMemberModal">New Group</h1>
+                <h1 className="modal-title fs-5" id="newMemberModal">Add Member</h1>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -61,8 +61,8 @@ export const Members = ({groupName}: Props) => {
       <div className="d-flex flex-column align-items-center w-75">
         <h1 className="display-2">{groupName} Members</h1>
         { members &&
-          members.map((item)=>(
-            <RemoveableItem title={item} removeable={isOwner} onRemove={()=>{
+          members.map((item, index)=>(
+            <RemoveableItem key={index} title={item} removeable={isOwner} onRemove={()=>{
               removeMember(groupName, item).then(()=>load_members()); // TODO: this is inefficient: just remove from the local array and reload the page
             }}/>
           ))
