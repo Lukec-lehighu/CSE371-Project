@@ -250,3 +250,50 @@ export async function newReceipt(groupName: string, receiptName: string): Promis
         return json.error;
     return null;
 }
+
+
+export async function getReceiptItems(rowid: number) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipt_items", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'GET',
+            'token': token,
+            'rowid': rowid
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function newReceiptItem(rowid: number, itemname: string, cost: number): Promise<string|null> {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipt_items", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'POST',
+            'token': token,
+            'rowid': rowid,
+            'itemname': itemname,
+            'cost': cost
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+    return null;
+}

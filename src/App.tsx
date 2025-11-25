@@ -40,7 +40,7 @@ function App() {
       case 3:
         return (
           <>
-            <Receipts/>
+            <Receipts groupName={currGroupName}/>
             <BackButton onClick={()=>setPageID(2)}/>
           </>
         );
