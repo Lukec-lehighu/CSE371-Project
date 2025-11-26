@@ -389,3 +389,32 @@ export async function toggleClaim(rowid: number, itemname: string) {
         return json.error;
     return null;
 }
+
+export async function getDebt(groupname:string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "debt", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'token': token,
+            'groupname': groupname
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+
+    //convert dictionary to list
+    let data:string[][] = []
+
+    for(let key in json.ok)
+        data.push([key, json.ok[key]]);
+
+    return data;
+}

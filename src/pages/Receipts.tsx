@@ -71,18 +71,19 @@ export const Receipts = ({groupName}: Props) => {
     })
   }
 
-  const createReceipt = async (formData:FormData)=> {
+  const createReceipt = (formData:FormData)=> {
     const name = formData.get('name')?.toString();
 
     setLoading(true);
 
     if(name) {
-      const res = await newReceipt(groupName, name); //res is null when newReceipt is a success
-      if(!res)
-        await load_receipts();
+      newReceipt(groupName, name).then((error)=>{
+        if(!error)
+          load_receipts();
+        else
+          setLoading(false);
+      }); //error is null when newReceipt is a success
     }
-
-    setLoading(false);
   }
 
   const addReceiptItem = async (formData:FormData)=> {
