@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getReceipts, newReceipt, getReceiptItems, newReceiptItem } from "../modules/api";
+import { getReceipts, newReceipt, getReceiptItems, newReceiptItem, getClaimedItems, toggleClaim, removeReceiptItem } from "../modules/api";
 import { RemoveableItem } from "../components/RemoveableItem";
 import Cookies from 'js-cookie';
 
@@ -11,11 +11,27 @@ export const Receipts = ({groupName}: Props) => {
   // so. many. states. why did I do this..
   const [receipts, setReceipts] = useState<any[]>();
   const [receiptData, setReceiptData] = useState<any[]>();
+  const [claimedItems, setClaimedItems] = useState<string[][]|null>();
   const [viewingReceipt, setViewingReceipt] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currRecName, setCurrRecName] = useState("");
   const [currRecID, setCurrRecID] = useState(-1);
   const [currRecIsOwner, setCurrRecIsOwner] = useState(false);
+
+  // helper function for determining whether or not a user already claimed an item
+  const userClaimedItem = (itemname:string) => {
+    const username = Cookies.get('email');
+
+    //I know there's some javascript bs you can do to make this pretty, but idc I'm sick of googling
+    if(claimedItems) {
+      for(let i=0; i<claimedItems.length; ++i) {
+        if(claimedItems[i][0] === itemname && claimedItems[i][1] === username)
+          return true;
+      }
+    }
+
+    return false;
+  }
 
   const load_receipts = async ()=>{
     setLoading(true);
@@ -23,15 +39,16 @@ export const Receipts = ({groupName}: Props) => {
     //reset states
     setCurrRecID(-1);
     setCurrRecIsOwner(false);
+    setClaimedItems(null);
 
     getReceipts(groupName).then((res)=> {
-      console.log(res);
       if(res)
         setReceipts(res);
       setLoading(false);
     });
   }
 
+  //load all receipt items for a specific rowid (receipt id) along with all of the claimed items
   const load_receipt_data = async (rid:number)=> {
     setLoading(true);
     getReceiptItems(rid).then((res)=>{
@@ -41,6 +58,17 @@ export const Receipts = ({groupName}: Props) => {
       setViewingReceipt(true);
       setLoading(false);
     });
+  }
+
+  const load_claimed_items = async (rid:number)=> {
+    setLoading(true);
+    getClaimedItems(rid).then((claimed)=> {
+        if(claimed)
+          setClaimedItems(claimed);
+
+        setViewingReceipt(true);
+        setLoading(false);
+    })
   }
 
   const createReceipt = async (formData:FormData)=> {
@@ -76,8 +104,14 @@ export const Receipts = ({groupName}: Props) => {
   }, []);
 
   return (
+    loading ?
+    <div className="d-flex flex-column align-items-center w-75">
+      <div className="spinner-border text-primary m-5 p-1" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    :
     viewingReceipt ?
-
     <>
       <div className="modal fade" id="newReceiptItemModal" tabIndex={-1} aria-labelledby="newGroup" aria-hidden="true">
         <div className="modal-dialog">
@@ -103,15 +137,33 @@ export const Receipts = ({groupName}: Props) => {
           </div>
         </div>
       </div>
-
+      
       <div className="d-flex flex-column align-items-center w-75">
-        <h1>{currRecName}</h1>
+        <h1 className="pt-2 pb-4">{currRecName}</h1>
+
         {
           receiptData?.map((item, index) => (
-            <RemoveableItem title={item[0] + " - $" + item[1]} 
+            <RemoveableItem title={item[0] + " - $" + item[1]}
               removeable={currRecIsOwner}
-              onRemove={()=>console.log('remove')}
-              onEdit={()=>console.log('edit')} 
+              onRemove={()=>{
+                setLoading(true);
+                removeReceiptItem(currRecID, item[0]).then((res)=>{
+                  if(res)
+                    load_receipt_data(currRecID); //reload page data
+                  else
+                    setLoading(false);
+                });
+              }}
+              onClaim={()=>{
+                setLoading(true);
+                toggleClaim(currRecID, item[0]).then((error)=>{
+                  if(!error)
+                    load_claimed_items(currRecID); //reload page data
+                  else
+                    setLoading(false);
+                }); 
+              }}
+              claimed={userClaimedItem(item[0])}
               key={index}
             />
           ))
@@ -143,23 +195,22 @@ export const Receipts = ({groupName}: Props) => {
           </div>
         </div>
       </div>
-
       <div className="d-flex flex-column align-items-center w-100">
         <h1 className="display-2 p-2">{groupName} Receipts</h1>
         {
           receipts?.map((item, index) => (
             <>
-              <RemoveableItem 
-                title={item[1]} 
-                removeable={item[3]===Cookies.get('email')} 
-                onRemove={()=>console.log('removed')} 
+              <RemoveableItem
+                title={item[1]}
+                removeable={item[3]===Cookies.get('email')}
+                onRemove={()=>console.log('removed')}
                 onView={()=>{
                   //set a billion different flags and stuff because I didn't put much thought into the design of this page. If you can't tell everything here is a rush job
                   setCurrRecName(item[1]);
                   setCurrRecID(item[0]);
                   setCurrRecIsOwner(item[3]===Cookies.get('email'));
-                  load_receipt_data(item[0]);
-                }} 
+                  load_receipt_data(item[0]).then(()=>load_claimed_items(item[0]));
+                }}
                 key={index}
               />
             </>

@@ -297,3 +297,72 @@ export async function newReceiptItem(rowid: number, itemname: string, cost: numb
         return json.error;
     return null;
 }
+
+export async function removeReceiptItem(rowid:number, itemname:string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipt_items", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'DELETE',
+            'token': token,
+            'rowid': rowid,
+            'itemname': itemname
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function getClaimedItems(rowid: number) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "claimed_items", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'GET',
+            'token': token,
+            'rowid': rowid
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
+export async function toggleClaim(rowid: number, itemname: string) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "claimed_items", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'POST',
+            'token': token,
+            'rowid': rowid,
+            'itemname': itemname
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+    return null;
+}

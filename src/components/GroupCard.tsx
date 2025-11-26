@@ -28,7 +28,7 @@ export const GroupCard = ({name, joined, setPageID, setGroupName, id}: Props) =>
   return (
     <>
       <div className="d-flex justify-content-between align-items-center">
-        <p className="align-self-center">{name}</p>
+        <div className="align-self-center">{name}</div>
         <button type="button" className={"btn " + (isJoined ? "btn-success" : "btn-secondary")}
                 onClick={(isJoined ? ()=>{
                   setGroupName(name);
