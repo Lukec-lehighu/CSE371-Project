@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getReceipts, newReceipt, getReceiptItems, newReceiptItem, getClaimedItems, toggleClaim, removeReceiptItem } from "../modules/api";
+import { getReceipts, newReceipt, getReceiptItems, newReceiptItem, getClaimedItems, toggleClaim, removeReceiptItem, removeReceipt } from "../modules/api";
 import { RemoveableItem } from "../components/RemoveableItem";
 import Cookies from 'js-cookie';
 
@@ -203,7 +203,15 @@ export const Receipts = ({groupName}: Props) => {
               <RemoveableItem
                 title={item[1]}
                 removeable={item[3]===Cookies.get('email')}
-                onRemove={()=>console.log('removed')}
+                onRemove={()=>{
+                  setLoading(true);
+                  removeReceipt(item[0]).then((res)=> {
+                    if(res)
+                      load_receipts();
+                    else
+                      setLoading(false);
+                  });
+                }}
                 onView={()=>{
                   //set a billion different flags and stuff because I didn't put much thought into the design of this page. If you can't tell everything here is a rush job
                   setCurrRecName(item[1]);

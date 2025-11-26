@@ -251,6 +251,29 @@ export async function newReceipt(groupName: string, receiptName: string): Promis
     return null;
 }
 
+export async function removeReceipt(rowid: number) {
+    const token = Cookies.get('authToken');
+
+    const resp = await fetch(API_ADDR + "receipts", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'verb': 'DELETE',
+            'token': token,
+            'rowid': rowid,
+        })
+    });
+
+    const json = await resp.json();
+    if (json.error) {
+        console.log(json.error);
+        return null;
+    }
+    return json.ok;
+}
+
 
 export async function getReceiptItems(rowid: number) {
     const token = Cookies.get('authToken');
