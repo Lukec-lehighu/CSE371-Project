@@ -1,3 +1,3 @@
 npm install
 npm run build
-serve -s build -l 4000
+serve -s dist -l 4000
