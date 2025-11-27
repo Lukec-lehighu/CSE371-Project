@@ -1,7 +1,8 @@
 import type { groupData } from "../pages/Groups";
 import Cookies from 'js-cookie';
 
-const API_ADDR = 'http://127.0.0.1:5000/';
+//you can only access this IP if you are logged in under my Tailscale account, so there's no issue with me pushing this to GitHub
+const API_ADDR = 'http://100.93.66.64:8001/';
 
 export async function getAllGroups() {
     const token = Cookies.get('authToken');
