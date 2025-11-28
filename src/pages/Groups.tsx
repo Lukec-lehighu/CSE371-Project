@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { getAllGroups, addNewGroup } from "../modules/api";
+import { getAllGroups, addNewGroup, leaveGroup } from "../modules/api";
 import { GroupCard } from "../components/GroupCard"
 import Cookies from 'js-cookie';
 
 export interface groupData {
   name: string;
   joined: boolean;
+  owner: string;
 }
 
 interface Props {
@@ -17,6 +18,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
   const [groups, setGroups] = useState<groupData[]>();
   const [loading, setLoading] = useState(true);
   const [modalError, setModalError] = useState('');
+  const [deletingGroupname, setDeletingGroupname] = useState('');
 
   const closeModalRef = useRef<any>(null);
 
@@ -41,10 +43,18 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
 
   const loadGroups = ()=>{
     setLoading(true);
+    setDeletingGroupname('');
     getAllGroups().then((res)=>{
       setGroups(res);
       setLoading(false);
     })
+  }
+
+  const handleLeaveGroup = (groupname:string)=>{
+    leaveGroup(groupname).then((error)=>{
+      if(!error)
+        loadGroups();
+    });
   }
 
   useEffect(()=>{
@@ -74,12 +84,30 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" className="btn btn-primary" form="group-form">Create</button>
+              <button type="submit" className="btn btn-primary" form="group-form" data-bs-dismiss="modal">Create</button>
               {modalError!=='' && 
                 <div className="alert alert-danger" role="alert">
                   {modalError}
                 </div>
               }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="modal fade" id="warningModal" tabIndex={-1} aria-labelledby="newGroup" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+                <h1 className="modal-title fs-5" id="warningModal">Warning!</h1>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ref={closeModalRef}></button>
+            </div>
+            <div className="modal-body">
+                You are the owner of this group. Leaving will delete the group for all users. Are you sure you want to leave?
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={()=>handleLeaveGroup(deletingGroupname)}>Leave</button>
             </div>
           </div>
         </div>
@@ -97,12 +125,19 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
             {
               groups && groups.map((item, index) => (
                 <li key={index} className="list-group-item">
-                  <GroupCard name={item.name[0]} joined={item.joined} setPageID={setPageID} setGroupName={setGroupName} id={index}/>
+                  <GroupCard name={item.name} 
+                            joined={item.joined} 
+                            setPageID={setPageID} 
+                            setGroupName={setGroupName} 
+                            id={index} 
+                            isOwner={Cookies.get('email')===item.owner} 
+                            onLeave={handleLeaveGroup}
+                            setDeletingGroupName={setDeletingGroupname}/>
                 </li>
               ))
             }
           </ul>
-          <div className="d-flex justify-content-center" style={{position: "fixed", bottom:20}}>
+          <div className="d-flex justify-content-center" style={{position: "fixed", bottom:20, left:20}}>
             <button className="btn btn-dark p-3" onClick={loadGroups}>Refresh</button>
           </div>
         </>

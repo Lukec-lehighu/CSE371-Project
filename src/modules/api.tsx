@@ -1,7 +1,8 @@
 import type { groupData } from "../pages/Groups";
 import Cookies from 'js-cookie';
 
-const API_ADDR = 'http://raspi3.home:8001/';
+//const API_ADDR = 'http://raspi3.home:8001/';
+const API_ADDR = 'http://localhost:5000/';
 
 export async function getAllGroups() {
     const token = Cookies.get('authToken');
@@ -26,13 +27,36 @@ export async function getAllGroups() {
     json.ok.forEach((item:any[])=>{
         let temp: groupData = {
             name: item[0],
-            joined: item[1]
+            joined: item[1],
+            owner: item[2]
         }
 
         data.push(temp);
     })
     
     return data;
+}
+
+export async function leaveGroup(groupname: string) {
+    const token = Cookies.get('authToken');
+    const username = Cookies.get('email')
+
+    const resp = await fetch(API_ADDR + "remove_from_group", {
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({
+            'token': token,
+            'groupname': groupname,
+            'username': username
+        })
+    });
+
+    const json = await resp.json();
+    if(json.error)
+        return json.error;
+    return null;
 }
 
 export async function addNewGroup(groupName:string, ownerName:string, isPublic:boolean): Promise<string|null> { //return error if failure, null otherwise

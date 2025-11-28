@@ -7,9 +7,12 @@ interface Props {
   setPageID: (id:number) => void;
   setGroupName: (name:string) => void;
   id: number;
+  isOwner: boolean;
+  onLeave: (groupname:string)=>void;
+  setDeletingGroupName: (groupname:string)=>void;
 }
 
-export const GroupCard = ({name, joined, setPageID, setGroupName, id}: Props) => {
+export const GroupCard = ({name, joined, setPageID, setGroupName, id, isOwner, onLeave, setDeletingGroupName}: Props) => {
   const [isJoined, setIsJoined] = useState<boolean>(joined);
   const [loading, setLoading] = useState(false);
 
@@ -27,13 +30,25 @@ export const GroupCard = ({name, joined, setPageID, setGroupName, id}: Props) =>
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center">
-        <div className="align-self-center">{name}</div>
+      <div className="d-flex align-items-center gap-2">
+        <div className="align-self-center me-auto">{name}</div>
+
+        {joined &&
+          <button type="button" 
+                  className={"btn btn-" + (isOwner?"danger":"warning")}
+                  data-bs-toggle="modal" data-bs-target={isOwner&&"#warningModal"}
+                  onClick={isOwner ? ()=>setDeletingGroupName(name) : ()=>onLeave(name)}>
+            {isOwner?"Delete":"Leave"}
+          </button>
+        }
+
         <button type="button" className={"btn " + (isJoined ? "btn-success" : "btn-secondary")}
-                onClick={(isJoined ? ()=>{
+                onClick={(isJoined ? 
+                ()=>{
                   setGroupName(name);
                   setPageID(2);
-                } : ()=>{
+                } : 
+                ()=>{
                   if(!loading) {
                     setLoading(true);
                     joinGroup(name).then((resp)=> {
