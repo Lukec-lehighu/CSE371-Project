@@ -10,7 +10,7 @@ interface Props {
 
 export const RemoveableItem = ({title, removeable, onRemove=()=>console.log('removed'), onView=null, onEdit=null, onClaim=null, claimed=false}: Props) => {
   return (
-    <div className="d-flex flex-row w-75 border m-3 p-2 gap-1">
+    <div className="d-flex flex-row w-100 border m-3 p-2 gap-1">
         <div className="align-self-center p-2 me-auto">{title}</div>
 
         {onClaim &&

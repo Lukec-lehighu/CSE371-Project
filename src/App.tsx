@@ -26,7 +26,7 @@ function App() {
         //this is kind of the home page ig
         return (
           <div className="w-100 d-flex flex-column align-items-center">
-            <h1 className="display-2 fw-bold p-4">House Debt Tracker</h1>
+            <h1 className="display-2 fw-bold p-4 align-self-center">House Debt Tracker</h1>
             <Groups setPageID={setPageID} setGroupName={setGroupName}/>
           </div>
         );

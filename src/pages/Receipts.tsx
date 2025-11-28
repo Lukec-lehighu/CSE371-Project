@@ -139,8 +139,8 @@ export const Receipts = ({groupName}: Props) => {
         </div>
       </div>
       
-      <div className="d-flex flex-column align-items-center w-75">
-        <h1 className="pt-2 pb-4">{currRecName}</h1>
+      <div className="d-flex flex-column align-items-center w-100">
+        <h1 className="pt-3 pb-3">{currRecName}</h1>
 
         {
           receiptData?.map((item, index) => (

@@ -121,7 +121,7 @@ export const Groups = ({setPageID, setGroupName}: Props) => {
         </> 
         : 
         <>
-          <ul className="list-group overflow-auto w-75" data-bs-spy="scroll">
+          <ul className="list-group overflow-auto w-100" data-bs-spy="scroll">
             {
               groups && groups.map((item, index) => (
                 <li key={index} className="list-group-item">
