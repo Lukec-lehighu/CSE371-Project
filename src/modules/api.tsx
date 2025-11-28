@@ -1,8 +1,8 @@
 import type { groupData } from "../pages/Groups";
 import Cookies from 'js-cookie';
 
-//const API_ADDR = 'http://raspi3.home:8001/';
-const API_ADDR = 'http://localhost:5000/';
+const API_ADDR = 'http://raspi3.home:8001/';
+//const API_ADDR = 'http://localhost:5000/';
 
 export async function getAllGroups() {
     const token = Cookies.get('authToken');
