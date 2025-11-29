@@ -12,7 +12,7 @@ export const GroupHome = ({groupName, setPageID}: Props) => {
           <button className="btn btn-primary btn-lg" onClick={()=>setPageID(3)}>Receipts</button>
           <button className="btn btn-primary btn-lg" onClick={()=>setPageID(4)}>Requests</button>
           <button className="btn btn-primary btn-lg" onClick={()=>setPageID(5)}>Members</button>
-          <button className="btn btn-primary btn-lg" onClick={()=>setPageID(6)}>My Dept</button>
+          <button className="btn btn-primary btn-lg" onClick={()=>setPageID(6)}>My Debt</button>
         </div>
       </div>
     </>
